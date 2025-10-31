@@ -5,7 +5,10 @@ from app import models, schemas
 from app.database import engine, SessionLocal
 from app import auth
 from app.routes import admissions, auth_routes, staff
-
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates  
+from fastapi import Request
 
 app = FastAPI()
 
@@ -13,6 +16,9 @@ app.include_router(auth.router)
 app.include_router(staff.router)
 app.include_router(admissions.router)
 app.include_router(auth_routes.router)
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+templates = Jinja2Templates(directory="app/templates")  
+
 
 @app.get("/")
 def root():
@@ -100,3 +106,20 @@ def create_patient(payload: schemas.PatientCreate, db: Session = Depends(get_db)
     response_dict["bed_number"] = bed_no
     app.include_router(auth.router)
     return response_dict
+
+
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/login", response_class=HTMLResponse)
+def login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
+@app.get("/dashboard", response_class=HTMLResponse)
+def dashboard(request: Request):
+    return templates.TemplateResponse("dashboard.html", {"request": request})
+
+@app.get("/patients", response_class=HTMLResponse)
+def patients_page(request: Request):
+    return templates.TemplateResponse("patients.html", {"request": request})
