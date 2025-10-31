@@ -8,9 +8,9 @@ from app import models, database
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
-SECRET_KEY = "hs-123"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 120
+SECRET_KEY = "hs_secretkey"
+ALGORITHM = "HS2005"
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
