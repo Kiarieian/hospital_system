@@ -1,18 +1,22 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const registerForm = document.getElementById("registerForm");
   const loginForm = document.getElementById("loginForm");
   const admitForm = document.getElementById("admitForm");
 
+  // =====================
   // LOGIN
+  // =====================
   if (loginForm) {
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+
       const res = await fetch("/token", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({
           username: document.getElementById("username").value,
-          password: document.getElementById("password").value
-        })
+          password: document.getElementById("password").value,
+        }),
       });
 
       const data = await res.json();
@@ -25,7 +29,43 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // =====================
+  // REGISTER
+  // =====================
+  if (registerForm) {
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = {
+        username: document.getElementById("username").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
+        confirmPassword: document.getElementById("confirmPassword").value,
+      }
+
+      if (password !== confirmPassword) {
+        document.getElementById("msg").textContent = "Passwords do not match!";
+        return;
+      }
+
+      const res = await fetch("/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: formData,
+      });
+
+      if (res.ok) {
+        window.location.href = "/auth/login";
+      } else {
+        const data = await res.json();
+        alert(data?.detail || "Registration failed!");
+      }
+    });
+  }
+
+  // =====================
   // ADMIT PATIENT
+  // =====================
   if (admitForm) {
     admitForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -37,16 +77,16 @@ document.addEventListener("DOMContentLoaded", () => {
         address: document.getElementById("address").value,
         contact: document.getElementById("contact").value,
         gender: "female",
-        date_of_birth: "2000-01-01"
+        date_of_birth: "2000-01-01",
       };
 
       const res = await fetch("/patients", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(patient)
+        body: JSON.stringify(patient),
       });
 
       const data = await res.json();
@@ -56,20 +96,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // =====================
   // DISPLAY PATIENTS
+  // =====================
   if (document.getElementById("patientsTable")) {
     (async () => {
       const res = await fetch("/patients");
       const patients = await res.json();
-      consttbody = document.querySelector("#patientsTable tbody");
-      patients.forEach(p => {
-        const row = `<tr>
-         <td>${p.id}</td>
-          <td>${p.full_name}</td>
-          <td>${p.ward_type}</td>
-          <td>${p.contact}</td>
-          <td>${p.address}</td>
-        </tr>`;
+      const tbody = document.querySelector("#patientsTable tbody");
+
+      patients.forEach((p) => {
+        const row = `
+          <tr>
+            <td>${p.id}</td>
+            <td>${p.full_name}</td>
+            <td>${p.ward_type}</td>
+            <td>${p.contact}</td>
+            <td>${p.address}</td>
+          </tr>`;
         tbody.innerHTML += row;
       });
     })();
