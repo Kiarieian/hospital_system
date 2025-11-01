@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app import models, schemas
@@ -11,20 +12,20 @@ from fastapi import Request
 
 app = FastAPI()
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+templates = Jinja2Templates(directory="app/templates")
+
 app.include_router(auth.router)
 app.include_router(staff.router)
 app.include_router(admissions.router)
 app.include_router(auth_routes.router)
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
-templates = Jinja2Templates(directory="app/templates")  
+  
 
 
-@app.get("/")
-def root():
-    return {"message": "Hospital Management System API"}
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("index.html", {"request": request, "title": "Hospital Management System"})
 
 @app.get("/login", response_class=HTMLResponse)
 def login_page(request: Request):
