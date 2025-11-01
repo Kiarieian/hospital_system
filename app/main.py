@@ -22,6 +22,22 @@ templates = Jinja2Templates(directory="app/templates")
 @app.get("/")
 def root():
     return {"message": "Hospital Management System API"}
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/login", response_class=HTMLResponse)
+def login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
+@app.get("/dashboard", response_class=HTMLResponse)
+def dashboard(request: Request):
+    return templates.TemplateResponse("dashboard.html", {"request": request})
+
+@app.get("/patients", response_class=HTMLResponse)
+def patients_page(request: Request):
+    return templates.TemplateResponse("patients.html", {"request": request})
+
 
 # create tables if not present
 models.Base.metadata.create_all(bind=engine)
@@ -107,19 +123,4 @@ def create_patient(payload: schemas.PatientCreate, db: Session = Depends(get_db)
     return response_dict
 
 
-@app.get("/", response_class=HTMLResponse)
-def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
-@app.get("/login", response_class=HTMLResponse)
-def login_page(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
-
-@app.get("/dashboard", response_class=HTMLResponse)
-def dashboard(request: Request):
-    return templates.TemplateResponse("dashboard.html", {"request": request})
-
-@app.get("/patients", response_class=HTMLResponse)
-def patients_page(request: Request):
-    return templates.TemplateResponse("patients.html", {"request": request})
 
