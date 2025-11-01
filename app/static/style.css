@@ -1,18 +1,36 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f7fa;
-  color: #333;
+/* ------------------------------
+   GLOBAL RESET & BASE STYLES
+------------------------------ */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
+body {
+  background-color: #f5f7fa;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* ------------------------------
+   HEADER (COMMON)
+------------------------------ */
 header {
+  width: 100%;
   background: #0a3d62;
   color: #fff;
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 header a {
@@ -22,27 +40,123 @@ header a {
 }
 
 main {
-  padding: 20px;
+  width: 100%;
+  padding: 100px 20px 40px;
 }
 
+/* ------------------------------
+   LOGIN PAGE
+------------------------------ */
 .login-box {
-  margin: 100px auto;
-  width: 300px;
+  width: 320px;
   background: #fff;
-  padding: 20px;
+  padding: 25px 30px;
   border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-input, button {
+.login-box h2 {
+  margin-bottom: 20px;
+  color: #0a3d62;
+}
+
+.login-box input,
+.login-box button {
   width: 100%;
   padding: 10px;
-  margin: 5px 0;
+  margin: 8px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
-button {
+.login-box input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.login-box button {
   background: #0a3d62;
   color: white;
   border: none;
   cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-box button:hover {
+  background: #052c49;
+}
+
+/* ------------------------------
+   REGISTER PAGE
+------------------------------ */
+.register-container {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  width: 400px;
+}
+
+.register-container h2 {
+  text-align: center;
+  color: #0a3d62;
+  margin-bottom: 20px;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.register-form label {
+  margin-bottom: 5px;
+  color: #555;
+  font-weight: bold;
+}
+
+.register-form input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: border 0.3s;
+}
+
+.register-form input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.register-form button {
+  padding: 10px;
+  background: #007bff;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.register-form button:hover {
+  background: #0056b3;
+}
+
+/* ------------------------------
+   LINKS
+------------------------------ */
+.login-link {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.login-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
 }

@@ -27,6 +27,10 @@ app.include_router(auth_routes.router)
 def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "title": "Hospital Management System"})
 
+@app.get("/auth/register", response_class=HTMLResponse)
+def register_page(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
+
 @app.get("/login", response_class=HTMLResponse)
 def login_page(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})

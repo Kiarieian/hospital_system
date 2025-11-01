@@ -1,0 +1,82 @@
+from fastapi import Form, Request, Depends
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from sqlalchemy.orm import Session
+from models import User
+from database import SessionLocal
+from passlib.context import CryptContext
+
+templates = Jinja2Templates(directory="templates")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+@app.get("/auth/register", response_class=HTMLResponse)
+async def show_register_page(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
+
+@app.post("/auth/register", response_class=HTMLResponse)
+async def register_user(
+    request: Request,
+    username: str = Form(...),
+    email: str = Form(...),
+    password: str = Form(...),
+    confirm_password: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    if password != confirm_password:
+        return templates.TemplateResponse("register.html", {"request": request, "error": "Passwords do not match"})
+    
+    hashed_password = pwd_context.hash(password)
+    new_user = User(username=username, email=email, password=hashed_password)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    return templates.TemplateResponse("login.html", {"request": request, "success": "Account created successfully!"})
+from fastapi import Form, Request, Depends
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from sqlalchemy.orm import Session
+from models import User
+from database import SessionLocal
+from passlib.context import CryptContext
+
+templates = Jinja2Templates(directory="templates")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+@app.get("/auth/register", response_class=HTMLResponse)
+async def show_register_page(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
+
+@app.post("/auth/register", response_class=HTMLResponse)
+async def register_user(
+    request: Request,
+    username: str = Form(...),
+    email: str = Form(...),
+    password: str = Form(...),
+    confirm_password: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    if password != confirm_password:
+        return templates.TemplateResponse("register.html", {"request": request, "error": "Passwords do not match"})
+    
+    hashed_password = pwd_context.hash(password)
+    new_user = User(username=username, email=email, password=hashed_password)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    return templates.TemplateResponse("login.html", {"request": request, "success": "Account created successfully!"})
