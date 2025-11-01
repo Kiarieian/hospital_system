@@ -61,10 +61,10 @@ document.addEventListener("DOMContentLoaded", () => {
     (async () => {
       const res = await fetch("/patients");
       const patients = await res.json();
-      const tbody = document.querySelector("#patientsTable tbody");
+      co nst tbody = document.querySelector("#patientsTable tbody");
       patients.forEach(p => {
         const row = `<tr>
-          <td>${p.id}</td>
+         <td>${p.id}</td>
           <td>${p.full_name}</td>
           <td>${p.ward_type}</td>
           <td>${p.contact}</td>
